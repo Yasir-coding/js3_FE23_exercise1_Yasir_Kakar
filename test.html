@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Spinner Example</title>
+    <style>
+        /* Spinner Style */
+        #spinner {
+            position: fixed; /* Fixed position to make it an overlay */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000; /* Make sure it appears on top of everything */
+            display: block; /* Initially displayed */
+        }
+
+        /* Hide content while loading */
+        body.loading #content {
+            display: none;
+        }
+
+        /* Hide spinner after loading */
+        body:not(.loading) #spinner {
+            display: none;
+        }
+    </style>
+</head>
+<body class="loading">
+    <!-- Spinner Element -->
+    <div id="spinner">
+        <img src="spinner.gif" alt="Loading...">
+    </div>
+
+    <!-- Main Content -->
+    <div id="content">
+        <h1>Welcome to My Website</h1>
+        <p>This is the main content of the website.</p>
+        <p>Simulating a slow network load...</p>
+    </div>
+
+    <script>
+        // Minimum time for spinner to show, in milliseconds (for example, 3 seconds)
+        const MIN_SPINNER_TIME = 3000;
+
+        // Start the timer when the page starts loading
+        const spinnerTimer = setTimeout(function() {
+            console.log("Loading is taking some time due to slow internet.");
+        }, MIN_SPINNER_TIME);
+
+        // Monitor the window load event (after all resources like images are loaded)
+        window.addEventListener('load', function() {
+            // Ensure that the spinner is shown for at least MIN_SPINNER_TIME
+            const elapsed = Date.now() - performance.timing.navigationStart;
+            const remainingTime = MIN_SPINNER_TIME - elapsed;
+
+            // If the remaining time is positive, wait that time before hiding the spinner
+            if (remainingTime > 0) {
+                setTimeout(hideSpinner, remainingTime);
+            } else {
+                hideSpinner(); // Hide spinner immediately if enough time has passed
+            }
+        });
+
+        // Function to hide the spinner and show the content
+        function hideSpinner() {
+            clearTimeout(spinnerTimer); // Clear any running timeout
+            document.body.classList.remove('loading'); // Remove loading class
+        }
+
+        // Optional: Simulate a fetch request (for dynamic loading)
+        // Uncomment the below to simulate delayed API requests and spinner show
+
+        // simulateDelayedFetch();
+        // function simulateDelayedFetch() {
+        //     showSpinner();
+        //     fetch('https://jsonplaceholder.typicode.com/posts')
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             console.log('Fetched data:', data);
+        //             hideSpinner(); // Hide spinner after fetch
+        //         })
+        //         .catch(error => {
+        //             console.error('Error fetching data:', error);
+        //             hideSpinner(); // Hide spinner even if there's an error
+        //         });
+        // }
+    </script>
+</body>
+</html>

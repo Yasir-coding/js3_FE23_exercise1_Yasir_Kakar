@@ -2,6 +2,12 @@ let homeDom = document.getElementsByTagName("a")[0];
 let aboutDom = document.getElementsByTagName("a")[1];
 let contactDom = document.getElementsByTagName("a")[2];
 
+
+const log = document.querySelector(".event-log-contents");
+const reload = document.querySelector("#reload");
+
+
+
 window.addEventListener("popstate", () => {
   switch (history.state.page) {
     case 0:
@@ -19,8 +25,14 @@ window.addEventListener("popstate", () => {
 
 homeDom.addEventListener("click", () => {
   history.pushState({ page: 0 }, "", "/home");
-  fetchPage("home.html");
+  setTimeout(() => {
 
+    fetchPage("home.html");
+  }, 2000);
+  window.addEventListener("load", (event) => {
+    console.log("lsdfm");
+
+  })
 })
 
 aboutDom.addEventListener("click", () => {
@@ -44,7 +56,26 @@ function fetchPage(filename) {
 
     return result.text();
   }).then((data) =>
-    contentDom.innerHTML = data).catch((e) => {
-      alert("blev kaos ", e)
+    contentDom.innerHTML = data)
+    .catch((e) => {
+      if (e) {
+        document.querySelector("#testImg").style.display = "block";
+        console.log("sidfm");
+
+      } else if (!e) {
+        document.querySelector("#testImg").style.display = "none";
+
+      }
     })
 }
+
+
+// function fetchHtml(filename) {
+//   fetch(`./${filename}.txt`)
+//     .then((response) => {
+//       return response.text()
+//     })
+//     .then((html) => {
+//       content.innerHTML = html
+//     })
+// }
