@@ -50,6 +50,8 @@ contactDom.addEventListener("click", () => {
 let contentDom = document.getElementById("content");
 
 function fetchPage(filename) {
+  document.querySelector("#loader").style.display = "none";
+
   if (typeof filename != "string") return
 
   fetch(filename).then((result) => {
@@ -59,11 +61,10 @@ function fetchPage(filename) {
     contentDom.innerHTML = data)
     .catch((e) => {
       if (e) {
-        document.querySelector("#testImg").style.display = "block";
-        console.log("sidfm");
+        document.querySelector("#loader").style.display = "block";
 
       } else if (!e) {
-        document.querySelector("#testImg").style.display = "none";
+        document.querySelector("#loader").style.display = "none";
 
       }
     })
